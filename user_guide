@@ -1,0 +1,50 @@
+#Use of parameters:
+
+
+#1)To train/test the network model set train=1/0
+
+#2) Default T=9, T parameter defines the number of communication blocks and when T=9 this corresponds to rate 3/9 and the partial rates such as 3/8, 3/7, 3/6 can be optained by changing T parameter.
+
+
+#3) Currently we are not using vector embedding option (which maps the original bits to a vector); hence set embedding = False, embed_normalize = False.
+
+#4) rev_iter parameter is used to employ successive refinement, default set rev_iter = 0.
+
+#5) NS_model = 2 defines the feature extractor model. Note: for noisy feedback simulations replace GELU with RELU
+
+#6) Line 170 of the main file there is an optional curriculam learning strategy (which can be discarded or can be extended to noisy feedback scenario as well)
+
+#7) For the optimizer we utilize the adamW which is simialr to adam but also employs a weight decay for weights. We also clip the gradients with according to clip_th paramters which default set to 0.5.
+
+
+#8) For noiseless feedback scenario set snr2=100.
+
+Saving models:
+
+During the training model is saved in line 239 of the main file (currently we start saving models after 80000 batch with period of 5000 batches)
+
+Line 321 in main (args.saveDir = 'weights/model_weights120000') defines the model which will be used for test.
+
+
+
+
+Flow of the code:
+
+
+Main.py includes test/train codes including generation of the bit-streams / noise realization / initialization of joint encoder/decoder mechanism.
+
+nn.layers.py includes the Bert(transfomer) architectures with its submodules. Note: The code includes custom multi-head attention mechanism although we provide an option for using builtin version (pytorch) of the multi-head attention mechanism.
+
+util.py includes the functions for positional encoding (used in transformer) and power reallocation (which reallocates the power after the initial power normalization) 
+
+
+
+
+
+
+
+Related Links:
+
+Transformer encoder layer:  https://pytorch.org/docs/stable/generated/torch.nn.TransformerEncoderLayer.html
+
+Multi-head attention module: https://pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html
